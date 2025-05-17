@@ -1,0 +1,15 @@
+#student-table th, #student-table td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#student-table .actions {
+    display: flex;
+    gap: 10px;
+}
+
+#student-table .actions .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+}

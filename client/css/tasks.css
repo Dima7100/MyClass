@@ -1,0 +1,26 @@
+#tasks-table th, #tasks-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tasks-table .task-name {
+    cursor: pointer;
+}
+
+#tasks-table .task-name:hover {
+    background-color: #f0f0f0;
+}
+
+#tasks-table .completion {
+    cursor: pointer;
+}
+
+#tasks-table .completion.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#status-message {
+    margin-top: 10px;
+}

@@ -1,0 +1,21 @@
+<div id="absences-calendar-section">
+    <div class="container mt-4">
+        <h2>Календарь пропусков</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" id="studentFilter" class="form-control" placeholder="Фильтр по ученику..." aria-label="Фильтр по ученику">
+                    <button class="btn btn-outline-secondary" type="button" id="filterBtn">Фильтр</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mb-3">
+                    <input type="text" id="datepicker" class="form-control" placeholder="Выберите дату..." readonly>
+                    <button class="btn btn-outline-secondary" type="button" id="dateBtn">Выбрать</button>
+                </div>
+            </div>
+        </div>
+        <div id="calendar" class="mt-4"></div>
+        <div id="attendanceList" class="mt-4"></div>
+    </div>
+</div>

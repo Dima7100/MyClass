@@ -1,0 +1,33 @@
+#events-table th, #events-table td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#events-table .event-name {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#events-table .event-name:hover {
+    text-decoration: underline;
+}
+
+#events-table .participation {
+    cursor: pointer;
+    background-color: #f8f9fa;
+}
+
+#events-table .participation.active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+#status-message {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#status-message.show {
+    opacity: 1;
+}

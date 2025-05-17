@@ -1,0 +1,64 @@
+<div id="class-management-section">
+    <div class="container mt-4">
+        <h2>Управление классом</h2>
+        <div class="mb-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">Добавить ученика</button>
+            <button class="btn btn-danger" id="clear-database-btn">Очистить базу данных</button>
+        </div>
+        <table class="table table-bordered" id="student-table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования ученика -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStudentModalLabel">Добавить ученика</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="student-full-name" class="form-label">ФИО</label>
+                        <input type="text" class="form-control" id="student-full-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="student-birth-date" class="form-label">Дата рождения (ДД-ММ-ГГГГ)</label>
+                        <input type="date" class="form-control" id="student-birth-date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="student-passport" class="form-label">Паспорт</label>
+                        <input type="text" class="form-control" id="student-passport">
+                    </div>
+                    <div class="mb-3">
+                        <label for="student-snils" class="form-label">СНИЛС</label>
+                        <input type="text" class="form-control" id="student-snils">
+                    </div>
+                    <div class="mb-3">
+                        <label for="student-phone" class="form-label">Телефон</label>
+                        <input type="text" class="form-control" id="student-phone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="student-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="student-email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="parent-info" class="form-label">Информация о родителях</label>
+                        <textarea class="form-control" id="parent-info" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-student-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой класс</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <!-- Добавляем Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'MV-crooker';
+            src: url('fonts/MV-crooker.ttf') format('truetype');
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <div class="sidebar p-3" style="width: 300px; height: 100vh;">
+            <div class="sidebar-header d-flex align-items-center mb-4">
+                <img src="images/my-class-logo.png" alt="My Class Logo" style="width: 50px; height: auto; margin-right: 10px;">
+                <h4 class="mb-0" style="font-family: 'MV-crooker', sans-serif;">Мой класс</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="personal">
+                        <i class="bi bi-person me-2"></i>Личные данные
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="#" data-bs-toggle="collapse" data-bs-target="#absencesMenu">
+                        <i class="bi bi-calendar-x me-2"></i>Пропуски
+                        <i class="bi bi-chevron-right ms-auto toggle-icon"></i>
+                    </a>
+                    <div class="collapse" id="absencesMenu">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link submenu-item" href="#" data-section="absences_calendar">Календарь пропусков</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link submenu-item" href="#" data-section="absences_stats">Статистика пропусков</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="events">
+                        <i class="bi bi-calendar-event me-2"></i>Мероприятия
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="olympiads">
+                        <i class="bi bi-trophy me-2"></i>Олимпиады
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="tasks">
+                        <i class="bi bi-list-task me-2"></i>Поручения
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="summary">
+                        <i class="bi bi-bar-chart me-2"></i>Сводка
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-section="class_management">
+                        <i class="bi bi-gear me-2"></i>Управление классом
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="content p-4 flex-grow-1">
+            <h2 id="sectionTitle" class="mb-3">Выберите раздел</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Главная</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" id="breadcrumbSection">Выберите раздел</li>
+                </ol>
+            </nav>
+            <div id="sectionContent" class="p-4"></div>
+        </div>
+    </div>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

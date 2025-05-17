@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5ff; /* Фон из скриншота */
+}
+
+.sidebar {
+    background-color: #f7f7fa; /* Светлый фон панели */
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1); /* Усиленная тень для эффекта нависания */
+    z-index: 1; /* Устанавливаем сайдбар поверх контента */
+}
+
+.sidebar h4 {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    border-radius: 5px;
+    padding: 10px 15px;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+}
+
+.sidebar .nav-link.active {
+    color: #6c63ff; /* Фиолетовый акцент */
+    background-color: transparent;
+}
+
+.sidebar .nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background-color: #6c63ff; /* Полоса слева для активного пункта */
+}
+
+.sidebar .collapse .nav-link {
+    color: #333; /* Исправлено: чёрный цвет для подразделов */
+    padding: 8px 20px;
+    white-space: nowrap; /* Предотвращаем перенос текста */
+}
+
+.sidebar .collapse .nav-link:hover {
+    color: #6c63ff; /* Фиолетовый при наведении */
+}
+
+.content {
+    background-color: #f5f5ff;
+    margin-left: -1px; /* Смещение для визуального эффекта тени */
+}
+
+#sectionTitle {
+    color: #333;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.breadcrumb {
+    background-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item a {
+    color: #adb5bd;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #333;
+}
+
+/* Стили для стрелочки */
+.toggle-icon {
+    transition: transform 0.2s;
+}
+
+#absencesMenu.show .toggle-icon {
+    transform: rotate(90deg); /* Поворот стрелки вниз при разворачивании */
+}

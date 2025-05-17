@@ -1,0 +1,28 @@
+.student-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.student-box:hover {
+    background-color: #e9ecef;
+}
+
+#summary-content h4 {
+    margin-top: 20px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+#summary-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#summary-content li {
+    margin-bottom: 5px;
+}

@@ -1,0 +1,25 @@
+<div id="summary-section">
+    <div class="container mt-4">
+        <h2>Сводка</h2>
+        <div class="row" id="student-boxes"></div>
+    </div>
+
+    <!-- Модальное окно для детальной сводки -->
+    <div class="modal fade" id="studentSummaryModal" tabindex="-1" aria-labelledby="studentSummaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentSummaryModalLabel">Сводка по ученику</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body" id="summary-content">
+                    <!-- Содержимое будет заполняться через JS -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="print-summary-btn">Напечатать</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div id="tasks-section">
+    <div class="container mt-4">
+        <h2>Поручения</h2>
+        <div class="mb-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">Добавить поручение</button>
+        </div>
+        <div class="alert alert-dismissible fade" role="alert" id="status-message"></div>
+        <table class="table table-bordered" id="tasks-table">
+            <thead>
+                <tr id="tasks-header"></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования поручения -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel">Добавить поручение</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="task-description" class="form-label">Описание поручения</label>
+                        <input type="text" class="form-control" id="task-description" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="delete-task-btn" style="display: none;">Удалить</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-task-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

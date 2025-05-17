@@ -1,0 +1,36 @@
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+#calendar div {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#calendar div:hover {
+    background-color: #f0f0f0;
+}
+
+#attendanceList table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#attendanceList th, #attendanceList td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#attendanceList th {
+    background-color: #f2f2f2;
+}
+
+#studentFilter, #datepicker {
+    max-width: 200px;
+}

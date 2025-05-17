@@ -1,0 +1,155 @@
+<div id="olympiads-section">
+    <!-- Вкладки этапов -->
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#school-stage">Школьный этап</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#municipal-stage">Муниципальный этап</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#regional-stage">Региональный этап</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#final-stage">Заключительный этап</a>
+        </li>
+    </ul>
+
+    <!-- Содержимое вкладок -->
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="school-stage">
+            <div class="mb-3">
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Добавить предмет</button>
+                <button class="btn btn-primary me-2" id="add-participants-btn-school" data-bs-toggle="modal" data-bs-target="#addParticipantsModal" data-bs-tooltip="tooltip" title="Сначала добавьте предметы" disabled>Добавить участников</button>
+                <button class="btn btn-primary" id="add-result-btn-school" data-bs-toggle="modal" data-bs-target="#addResultModal" disabled>Добавить результат</button>
+            </div>
+            <table class="table table-bordered olympiad-table" data-stage="school">
+                <thead>
+                    <tr class="olympiad-header"></tr>
+                </thead>
+                <tbody class="olympiad-body"></tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="municipal-stage">
+            <div class="mb-3">
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Добавить предмет</button>
+                <button class="btn btn-primary me-2" id="add-participants-btn-municipal" data-bs-toggle="modal" data-bs-target="#addParticipantsModal" data-bs-tooltip="tooltip" title="Сначала добавьте предметы" disabled>Добавить участников</button>
+                <button class="btn btn-primary" id="add-result-btn-municipal" data-bs-toggle="modal" data-bs-target="#addResultModal" disabled>Добавить результат</button>
+            </div>
+            <table class="table table-bordered olympiad-table" data-stage="municipal">
+                <thead>
+                    <tr class="olympiad-header"></tr>
+                </thead>
+                <tbody class="olympiad-body"></tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="regional-stage">
+            <div class="mb-3">
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Добавить предмет</button>
+                <button class="btn btn-primary me-2" id="add-participants-btn-regional" data-bs-toggle="modal" data-bs-target="#addParticipantsModal" data-bs-tooltip="tooltip" title="Сначала добавьте предметы" disabled>Добавить участников</button>
+                <button class="btn btn-primary" id="add-result-btn-regional" data-bs-toggle="modal" data-bs-target="#addResultModal" disabled>Добавить результат</button>
+            </div>
+            <table class="table table-bordered olympiad-table" data-stage="regional">
+                <thead>
+                    <tr class="olympiad-header"></tr>
+                </thead>
+                <tbody class="olympiad-body"></tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="final-stage">
+            <div class="mb-3">
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Добавить предмет</button>
+                <button class="btn btn-primary me-2" id="add-participants-btn-final" data-bs-toggle="modal" data-bs-target="#addParticipantsModal" data-bs-tooltip="tooltip" title="Сначала добавьте предметы" disabled>Добавить участников</button>
+                <button class="btn btn-primary" id="add-result-btn-final" data-bs-toggle="modal" data-bs-target="#addResultModal" disabled>Добавить результат</button>
+            </div>
+            <table class="table table-bordered olympiad-table" data-stage="final">
+                <thead>
+                    <tr class="olympiad-header"></tr>
+                </thead>
+                <tbody class="olympiad-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления предмета -->
+    <div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSubjectModalLabel">Добавить предмет</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="subject-name" class="form-label">Название предмета</label>
+                        <input type="text" class="form-control" id="subject-name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-subject-btn">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления участников -->
+    <div class="modal fade" id="addParticipantsModal" tabindex="-1" aria-labelledby="addParticipantsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addParticipantsModalLabel">Добавить участников</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="subject-select" class="form-label">Выберите предмет</label>
+                        <select class="form-select" id="subject-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Участники</label>
+                        <div id="participants-list"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-participants-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления результата -->
+    <div class="modal fade" id="addResultModal" tabindex="-1" aria-labelledby="addResultModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addResultModalLabel">Добавить результат</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="result-subject-select" class="form-label">Выберите предмет</label>
+                        <select class="form-select" id="result-subject-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="result-student-select" class="form-label">Выберите ученика</label>
+                        <select class="form-select" id="result-student-select"></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="result-status" class="form-label">Статус</label>
+                        <select class="form-select" id="result-status">
+                            <option value="Участник">Участник</option>
+                            <option value="Финалист">Финалист</option>
+                            <option value="Победитель">Победитель</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="save-result-btn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
