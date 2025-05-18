@@ -1,4 +1,4 @@
-window.init_название_раздела = function () {
+window.init_absences_stats = function () {
     console.log('Инициализация раздела "Статистика пропусков"');
     loadStatistics();
     setupEventListeners();

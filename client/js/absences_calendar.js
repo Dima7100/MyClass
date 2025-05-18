@@ -1,4 +1,4 @@
-window.init_название_раздела = function () {
+window.init_absences_calendar = function () {
     console.log('Инициализация раздела "Календарь пропусков"');
     initializeFlatpickr();
     initializeCalendar();

@@ -1,4 +1,4 @@
-window.init_class_management = function () {
+window.init_events = function () {
     console.log('Инициализация раздела "Мероприятия"');
     loadEvents();
     setupEventListeners();

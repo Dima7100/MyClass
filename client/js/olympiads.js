@@ -1,4 +1,4 @@
-window.init_class_management = function () {
+window.init_olimpiads = function () {
     console.log('Инициализация раздела "Олимпиады"');
     initializeTooltips();
     loadOlympiads();

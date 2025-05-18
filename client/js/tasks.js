@@ -1,4 +1,4 @@
-window.init_название_раздела = function () {
+window.init_tasks = function () {
     console.log('Инициализация раздела "Поручения"');
     loadTasks();
     setupEventListeners();

@@ -118,41 +118,42 @@ function setupEventListeners() {
             }
         }
     });
+}
 
-    async function editStudent(studentId) {
-        try {
-            console.log('Редактирование ученика с ID:', studentId);
-            const response = await fetch(`/api/students/${studentId}`);
-            if (!response.ok) throw new Error('Ошибка загрузки данных ученика');
-            const student = await response.json();
+async function editStudent(studentId) {
+    try {
+        console.log('Редактирование ученика с ID:', studentId);
+        const response = await fetch(`/api/students/${studentId}`);
+        if (!response.ok) throw new Error('Ошибка загрузки данных ученика');
+        const student = await response.json();
 
-            document.getElementById('student-full-name').value = student.full_name;
-            document.getElementById('student-phone').value = student.phone || '';
-            document.getElementById('student-email').value = student.email || '';
-            document.getElementById('parent-info').value = student.parents || '';
-            document.getElementById('student-birth-date').value = student.birth_date ? student.birth_date.split('T')[0] : '';
-            document.getElementById('student-passport').value = student.passport || '';
-            document.getElementById('student-snils').value = student.snils || '';
-            modalTitle.textContent = 'Редактировать ученика';
-            editingStudentId = studentId;
+        document.getElementById('student-full-name').value = student.full_name;
+        document.getElementById('student-phone').value = student.phone || '';
+        document.getElementById('student-email').value = student.email || '';
+        document.getElementById('parent-info').value = student.parents || '';
+        document.getElementById('student-birth-date').value = student.birth_date ? student.birth_date.split('T')[0] : '';
+        document.getElementById('student-passport').value = student.passport || '';
+        document.getElementById('student-snils').value = student.snils || '';
+        document.getElementById('addStudentModalLabel').textContent = 'Редактировать ученика';
+        window.editingStudentId = studentId; // Сохраняем ID в глобальной области
 
-            modal.show();
-        } catch (error) {
-            console.error('Ошибка при редактировании ученика:', error);
-            alert(`Ошибка: ${error.message}`);
-        }
+        const modal = new bootstrap.Modal(document.getElementById('addStudentModal'));
+        modal.show();
+    } catch (error) {
+        console.error('Ошибка при редактировании ученика:', error);
+        alert(`Ошибка: ${error.message}`);
     }
+}
 
-    async function deleteStudent(studentId) {
-        if (confirm('Вы уверены, что хотите удалить ученика?')) {
-            try {
-                const response = await fetch(`/api/students/${studentId}`, { method: 'DELETE' });
-                if (!response.ok) throw new Error('Ошибка удаления ученика');
-                await loadStudents();
-            } catch (error) {
-                console.error('Ошибка при удалении ученика:', error);
-                alert(`Ошибка удаления: ${error.message}`);
-            }
+async function deleteStudent(studentId) {
+    if (confirm('Вы уверены, что хотите удалить ученика?')) {
+        try {
+            const response = await fetch(`/api/students/${studentId}`, { method: 'DELETE' });
+            if (!response.ok) throw new Error('Ошибка удаления ученика');
+            await loadStudents();
+        } catch (error) {
+            console.error('Ошибка при удалении ученика:', error);
+            alert(`Ошибка удаления: ${error.message}`);
         }
     }
 }

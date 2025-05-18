@@ -2,12 +2,25 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Получение списка учеников с сортировкой по ФИО (А-Я)
+// Получение списка учеников
 router.get('/api/students', async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT * FROM students ORDER BY full_name ASC');
         res.json(rows);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Получение данных одного ученика
+router.get('/api/students/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await db.execute('SELECT * FROM students WHERE id = ?', [id]);
+        if (!rows.length) throw new Error('Ученик не найден');
+        res.json(rows[0]);
+    } catch (error) {
+        console.error('Ошибка в /api/students/:id:', error);
         res.status(500).json({ error: error.message });
     }
 });

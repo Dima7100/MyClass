@@ -3,8 +3,11 @@ const router = express.Router();
 const db = require('../config/db');
 
 router.get('/api/summary/students', async (req, res) => {
+    console.log('Получен запрос /api/summary/students');
     try {
+        console.log('Выполнение запроса к базе данных...');
         const [rows] = await db.execute('SELECT id, full_name FROM students ORDER BY full_name ASC');
+        console.log('Получены данные:', rows);
         res.json(rows);
     } catch (error) {
         console.error('Ошибка в /api/summary/students:', error);
