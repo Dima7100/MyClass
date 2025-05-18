@@ -1,9 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('events-section')) {
-        loadEvents();
-        setupEventListeners();
-    }
-});
+window.init_class_management = function () {
+    console.log('Инициализация раздела "Мероприятия"');
+    loadEvents();
+    setupEventListeners();
+};
 
 function setupEventListeners() {
     const saveEventBtn = document.getElementById('save-event-btn');

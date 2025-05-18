@@ -69,6 +69,7 @@ const pool = mysql.createPool({
                 FOREIGN KEY (student_id) REFERENCES students(id)
             )
         `);
+        console.log('Подключение к базе данных успешно');
         connection.release();
     } catch (error) {
         console.error('Ошибка создания таблиц:', error);

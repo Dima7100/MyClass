@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('absences-stats-section')) {
-        loadStatistics();
-        setupEventListeners();
-    }
-});
+window.init_название_раздела = function () {
+    console.log('Инициализация раздела "Статистика пропусков"');
+    loadStatistics();
+    setupEventListeners();
+};
+
 
 function setupEventListeners() {
     document.getElementById('statsFilterBtn').addEventListener('click', () => {

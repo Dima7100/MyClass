@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('olympiads-section')) {
-        initializeTooltips();
-        loadOlympiads();
-        setupEventListeners();
-    }
-});
+window.init_class_management = function () {
+    console.log('Инициализация раздела "Олимпиады"');
+    initializeTooltips();
+    loadOlympiads();
+    setupEventListeners();
+};
 
 const stages = ['school', 'municipal', 'regional', 'final'];
 let olympiadData = {

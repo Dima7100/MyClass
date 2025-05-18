@@ -7,13 +7,14 @@ const classManagementRoutes = require('./routes/class_management');
 const eventsRoutes = require('./routes/events');
 const olympiadsRoutes = require('./routes/olympiads');
 const tasksRoutes = require('./routes/tasks');
+const summaryRoutes = require('./routes/summary');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 
 // Логирование запросов
 app.use((req, res, next) => {
-    console.log(`${req.method} ${req.url}`);
+    console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
     next();
 });
 
@@ -32,6 +33,7 @@ app.use('/', classManagementRoutes);
 app.use('/', eventsRoutes);
 app.use('/', olympiadsRoutes);
 app.use('/', tasksRoutes);
+app.use('/', summaryRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

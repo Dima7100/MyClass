@@ -1,9 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('tasks-section')) {
-        loadTasks();
-        setupEventListeners();
-    }
-});
+window.init_название_раздела = function () {
+    console.log('Инициализация раздела "Поручения"');
+    loadTasks();
+    setupEventListeners();
+};
 
 function setupEventListeners() {
     const saveTaskBtn = document.getElementById('save-task-btn');

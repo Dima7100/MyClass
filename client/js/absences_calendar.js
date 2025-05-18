@@ -1,10 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('absences-calendar-section')) {
-        initializeFlatpickr();
-        initializeCalendar();
-        setupEventListeners();
-    }
-});
+window.init_название_раздела = function () {
+    console.log('Инициализация раздела "Календарь пропусков"');
+    initializeFlatpickr();
+    initializeCalendar();
+    setupEventListeners();
+};
 
 function initializeFlatpickr() {
     flatpickr('#datepicker', {

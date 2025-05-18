@@ -1,18 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('class-management-section')) {
-        loadStudents();
-        setupEventListeners();
-    }
-});
+window.init_class_management = function () {
+    console.log('Инициализация раздела "Управление классом"');
+    loadStudents();
+    setupEventListeners();
+};
 
 async function loadStudents() {
     const tbody = document.querySelector('#student-table tbody');
-    if (!tbody) return;
+    if (!tbody) {
+        console.error('Элемент #student-table tbody не найден');
+        return;
+    }
 
     try {
+        console.log('Отправка запроса к /api/students');
         const response = await fetch('/api/students');
-        if (!response.ok) throw new Error('Ошибка загрузки данных');
+        if (!response.ok) throw new Error('Ошибка загрузки данных: ' + response.status);
         const students = await response.json();
+        console.log('Получены данные:', students);
 
         tbody.innerHTML = students.map(student => `
             <tr data-student-id="${student.id}">
@@ -24,14 +28,22 @@ async function loadStudents() {
             </tr>
         `).join('');
 
+        // Обновляем обработчики после рендера
         document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', () => editStudent(btn.dataset.studentId));
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                editStudent(btn.dataset.studentId);
+            });
         });
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => deleteStudent(btn.dataset.studentId));
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                deleteStudent(btn.dataset.studentId);
+            });
         });
     } catch (error) {
+        console.error('Ошибка в loadStudents:', error);
         tbody.innerHTML = `<tr><td colspan="2">Ошибка загрузки данных: ${error.message}</td></tr>`;
     }
 }
@@ -44,7 +56,6 @@ function setupEventListeners() {
 
     let editingStudentId = null;
 
-    // Добавление/редактирование ученика
     saveStudentBtn.addEventListener('click', async () => {
         const fullName = document.getElementById('student-full-name').value.trim();
         const phone = document.getElementById('student-phone').value.trim();
@@ -90,11 +101,11 @@ function setupEventListeners() {
 
             await loadStudents();
         } catch (error) {
+            console.error('Ошибка при сохранении ученика:', error);
             alert(`Ошибка: ${error.message}`);
         }
     });
 
-    // Очистка базы данных
     clearDatabaseBtn.addEventListener('click', async () => {
         if (confirm('Вы уверены, что хотите очистить базу данных? Все данные будут удалены.')) {
             try {
@@ -102,6 +113,7 @@ function setupEventListeners() {
                 if (!response.ok) throw new Error('Ошибка очистки базы данных');
                 await loadStudents();
             } catch (error) {
+                console.error('Ошибка очистки базы данных:', error);
                 alert(`Ошибка очистки базы данных: ${error.message}`);
             }
         }
@@ -109,6 +121,7 @@ function setupEventListeners() {
 
     async function editStudent(studentId) {
         try {
+            console.log('Редактирование ученика с ID:', studentId);
             const response = await fetch(`/api/students/${studentId}`);
             if (!response.ok) throw new Error('Ошибка загрузки данных ученика');
             const student = await response.json();
@@ -125,6 +138,7 @@ function setupEventListeners() {
 
             modal.show();
         } catch (error) {
+            console.error('Ошибка при редактировании ученика:', error);
             alert(`Ошибка: ${error.message}`);
         }
     }
@@ -136,6 +150,7 @@ function setupEventListeners() {
                 if (!response.ok) throw new Error('Ошибка удаления ученика');
                 await loadStudents();
             } catch (error) {
+                console.error('Ошибка при удалении ученика:', error);
                 alert(`Ошибка удаления: ${error.message}`);
             }
         }

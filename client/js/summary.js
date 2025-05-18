@@ -1,17 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('summary-section')) {
-        loadStudentBoxes();
-        setupEventListeners();
-    }
-});
+window.init_summary = function () {
+    console.log('Инициализация раздела "Сводка"');
+    loadStudentBoxes();
+    setupEventListeners();
+};
 
 async function loadStudentBoxes() {
     const container = document.getElementById('student-boxes');
-    if (!container) return;
+    if (!container) {
+        console.error('Элемент #student-boxes не найден');
+        return;
+    }
 
     try {
-        const [rows] = await fetch('/api/summary/students').then(res => res.json()); // Предполагаемый эндпоинт для списка учеников
-        container.innerHTML = rows.map(student => `
+        console.log('Отправка запроса к /api/summary/students');
+        const response = await fetch('/api/summary/students');
+        if (!response.ok) throw new Error('Ошибка загрузки данных: ' + response.status);
+        const data = await response.json();
+        console.log('Получены данные:', data);
+
+        container.innerHTML = data.map(student => `
             <div class="col-md-3 student-box" data-student-id="${student.id}">
                 ${student.full_name}
             </div>
@@ -21,6 +28,7 @@ async function loadStudentBoxes() {
             box.addEventListener('click', () => showSummary(box.dataset.studentId));
         });
     } catch (error) {
+        console.error('Ошибка в loadStudentBoxes:', error);
         container.innerHTML = `<p>Ошибка загрузки учеников: ${error.message}</p>`;
     }
 }
@@ -37,9 +45,11 @@ async function showSummary(studentId) {
     const modal = new bootstrap.Modal(document.getElementById('studentSummaryModal'));
 
     try {
+        console.log(`Отправка запроса к /api/summary/${studentId}`);
         const response = await fetch(`/api/summary/${studentId}`);
         if (!response.ok) throw new Error('Ошибка загрузки сводки');
         const data = await response.json();
+        console.log('Получены данные сводки:', data);
 
         modalTitle.textContent = `Сводка по ${data.full_name}`;
         modalBody.innerHTML = `
@@ -64,6 +74,7 @@ async function showSummary(studentId) {
 
         modal.show();
     } catch (error) {
+        console.error('Ошибка в showSummary:', error);
         modalBody.innerHTML = `<p>Ошибка загрузки данных: ${error.message}</p>`;
         modal.show();
     }
