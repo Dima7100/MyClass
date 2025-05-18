@@ -30,4 +30,21 @@
 
 #status-message.show {
     opacity: 1;
+
+    .event-table td {
+        cursor: pointer;
+    }
+    
+    .event-table td:hover {
+        background-color: #f0f0f0; /* Лёгкое затемнение при наведении для наглядности */
+    }
+
+    .event-table td:first-child {
+        writing-mode: vertical-rl; /* Вертикальное направление текста справа налево */
+        transform: rotate(180deg); /* Поворот для читаемости */
+        white-space: nowrap; /* Предотвращаем перенос текста */
+        padding: 10px 5px; /* Уменьшаем боковые отступы для вертикального текста */
+        text-align: center; /* Центрируем текст */
+    }
 }
+

@@ -27,13 +27,15 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 
+console.log('Подключение маршрутов...');
+app.use('/', summaryRoutes); // Переместили summaryRoutes выше
 app.use('/api/auth', authRoutes);
 app.use('/', attendanceRoutes);
 app.use('/', classManagementRoutes);
 app.use('/', eventsRoutes);
 app.use('/', olympiadsRoutes);
 app.use('/', tasksRoutes);
-app.use('/', summaryRoutes);
+console.log('Маршруты подключены');
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

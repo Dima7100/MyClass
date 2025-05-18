@@ -18,6 +18,18 @@ router.get('/api/events', async (req, res) => {
     }
 });
 
+router.get('/api/events/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await db.execute('SELECT * FROM events WHERE id = ?', [id]);
+        if (!rows.length) throw new Error('Мероприятие не найдено');
+        res.json(rows[0]);
+    } catch (error) {
+        console.error('Ошибка в /api/events/:id:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Добавление мероприятия
 router.post('/api/events', async (req, res) => {
     try {

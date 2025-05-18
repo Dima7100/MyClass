@@ -1,28 +1,20 @@
 .student-box {
-    border: 1px solid #ccc;
+    background-color: #f8f9fa; /* Светлый фон */
+    border-radius: 10px; /* Закруглённые углы */
     padding: 15px;
-    margin: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #f8f9fa;
+    margin: 10px; /* Добавляем отступы со всех сторон */
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    cursor: pointer; /* Указатель, что элемент кликабельный */
+    transition: transform 0.2s, box-shadow 0.2s; /* Плавный эффект при наведении */
 }
 
 .student-box:hover {
-    background-color: #e9ecef;
+    transform: translateY(-3px); /* Поднимаем карточку при наведении */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Усиливаем тень */
 }
 
-#summary-content h4 {
-    margin-top: 20px;
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 5px;
-}
-
-#summary-content ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-#summary-content li {
-    margin-bottom: 5px;
+.student-box:active {
+    transform: translateY(0); /* Возвращаем на место при клике */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Уменьшаем тень */
 }

@@ -7,7 +7,7 @@ router.get('/api/tasks', async (req, res) => {
     try {
         const [tasks] = await db.execute('SELECT * FROM tasks');
         const [completions] = await db.execute(`
-            SELECT task_id, student_id FROM tasks WHERE completed = TRUE
+            SELECT id, student_id FROM tasks WHERE completed = TRUE
         `);
         const [students] = await db.execute('SELECT id, full_name FROM students');
         res.json({ tasks, completions, students });

@@ -65,4 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
             sectionContent.innerHTML = `<p>Ошибка загрузки раздела: ${error.message}</p>`;
         }
     }
+
+        // Загружаем раздел "Личные данные" по умолчанию
+        loadSection('personal');
+        sectionTitle.textContent = 'Личные данные';
+        breadcrumbSection.textContent = 'Личные данные';
 });
