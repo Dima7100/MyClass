@@ -13,39 +13,41 @@ async function loadEvents() {
     }
 
     try {
-        // Получаем мероприятия через API
         const eventsResponse = await fetch('/api/events');
         if (!eventsResponse.ok) throw new Error('Ошибка загрузки мероприятий');
         const events = await eventsResponse.json();
+        console.log('Мероприятия:', events);
 
-        // Получаем данные об участии через API
         const participationsResponse = await fetch('/api/events/participations');
         if (!participationsResponse.ok) throw new Error('Ошибка загрузки данных об участии');
         const participations = await participationsResponse.json();
+        console.log('Участия:', participations);
 
-        // Получаем список учеников
         const studentsResponse = await fetch('/api/students');
         if (!studentsResponse.ok) throw new Error('Ошибка загрузки учеников');
         const students = await studentsResponse.json();
+        console.log('Ученики:', students);
 
+        // Заголовок таблицы: первый столбец — "Названия мероприятий", остальные — ученики
         thead.innerHTML = `
             <tr>
-                <th>ФИО</th>
-                ${events.map(event => `
-                    <th title="${event.description || ''}">${event.name} (${event.weight})</th>
-                `).join('')}
+                <th>Названия мероприятий</th>
+                ${students.map(student => {
+                    const [lastName, firstName] = student.full_name.split(' ').slice(0, 2);
+                    const shortName = `${lastName} ${firstName.charAt(0).toUpperCase()}.`;
+                    return `<th>${shortName}</th>`;
+                }).join('')}
             </tr>
         `;
 
-        tbody.innerHTML = students.map(student => {
-            const studentParticipations = participations.filter(p => p.student_id === student.id);
-            const [lastName, firstName] = student.full_name.split(' ').slice(0, 2); // Берем только Фамилию и Имя
-            const shortName = `${lastName} ${firstName.charAt(0).toUpperCase()}.`;
+        // Тело таблицы: строки для каждого мероприятия
+        tbody.innerHTML = events.map(event => {
+            const eventParticipations = participations.filter(p => p.event_id === event.id);
             return `
-                <tr data-student-id="${student.id}">
-                    <td>${shortName}</td>
-                    ${events.map(event => {
-                        const participation = studentParticipations.find(p => p.event_id === event.id);
+                <tr>
+                    <td class="event-name" data-event-id="${event.id}" title="${event.description || ''}">${event.name}</td>
+                    ${students.map(student => {
+                        const participation = eventParticipations.find(p => p.student_id === student.id);
                         return `
                             <td data-event-id="${event.id}" data-student-id="${student.id}"
                                 style="${participation ? 'background-color: #d4edda' : ''}">
@@ -56,22 +58,37 @@ async function loadEvents() {
             `;
         }).join('');
 
-        document.querySelectorAll('.event-table td').forEach(td => {
+        // Строка "Сумма баллов"
+        const totalScoresRow = `
+            <tr>
+                <td>Сумма баллов</td>
+                ${students.map(student => {
+                    const studentParticipations = participations.filter(p => p.student_id === student.id);
+                    const totalScore = studentParticipations.reduce((sum, p) => {
+                        const event = events.find(e => e.id === p.event_id);
+                        return sum + (event ? event.weight : 0);
+                    }, 0);
+                    return `<td>${totalScore}</td>`;
+                }).join('')}
+            </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', totalScoresRow);
+
+        // Обработчик клика для редактирования мероприятия
+        document.querySelectorAll('.event-name').forEach(td => {
+            td.addEventListener('click', () => {
+                const eventId = td.dataset.eventId;
+                editEvent(eventId);
+            });
+        });
+
+        // Обработчик клика для отметки участия
+        document.querySelectorAll('.event-table td:not(:first-child)').forEach(td => {
             td.addEventListener('click', (e) => {
                 const eventId = td.dataset.eventId;
                 const studentId = td.dataset.studentId;
                 if (eventId && studentId) {
                     toggleParticipation(eventId, studentId, td);
-                }
-            });
-
-            // Добавляем обработчик для редактирования мероприятия при клике на заголовок
-            document.querySelectorAll('.event-table th').forEach((th, index) => {
-                if (index !== 0) { // Пропускаем первый столбец (ФИО)
-                    th.addEventListener('click', () => {
-                        const eventId = events[index - 1].id;
-                        editEvent(eventId);
-                    });
                 }
             });
         });
@@ -81,8 +98,50 @@ async function loadEvents() {
     }
 }
 
+async function toggleParticipation(eventId, studentId, td) {
+    try {
+        console.log(`Проверка участия: eventId=${eventId}, studentId=${studentId}`);
+        const participationExistsResponse = await fetch(`/api/events/participations?event_id=${eventId}&student_id=${studentId}`);
+        if (!participationExistsResponse.ok) throw new Error('Ошибка проверки участия');
+        const participationData = await participationExistsResponse.json();
+        console.log('Данные участия:', participationData);
+
+        let response;
+        if (participationData.length > 0) {
+            console.log('Удаление участия:', participationData[0].id);
+            response = await fetch(`/api/event_participations/${participationData[0].id}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error('Ошибка удаления участия');
+            td.textContent = '';
+            td.style.backgroundColor = '';
+        } else {
+            console.log('Добавление участия');
+            response = await fetch('/api/events/participation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ event_id: eventId, student_id: studentId })
+            });
+            if (!response.ok) throw new Error('Ошибка добавления участия');
+            const eventResponse = await fetch(`/api/events/${eventId}`);
+            if (!eventResponse.ok) throw new Error('Ошибка загрузки данных мероприятия');
+            const event = await eventResponse.json();
+            console.log('Данные мероприятия:', event);
+            td.textContent = event.weight;
+            td.style.backgroundColor = '#d4edda';
+        }
+
+        // Перезагружаем таблицу для обновления "Сумма баллов"
+        loadEvents();
+    } catch (error) {
+        console.error('Ошибка при обновлении участия:', error);
+        alert(`Ошибка: ${error.message}`);
+    }
+}
+
 function setupEventListeners() {
     const saveEventBtn = document.getElementById('save-event-btn');
+    const deleteEventBtn = document.getElementById('delete-event-btn');
     const modalTitle = document.getElementById('addEventModalLabel');
     const modal = new bootstrap.Modal(document.getElementById('addEventModal'));
 
@@ -121,6 +180,7 @@ function setupEventListeners() {
             document.getElementById('event-name').value = '';
             document.getElementById('event-description').value = '';
             document.getElementById('event-weight').value = '';
+            deleteEventBtn.style.display = 'none';
 
             await loadEvents();
         } catch (error) {
@@ -129,60 +189,49 @@ function setupEventListeners() {
         }
     });
 
-    async function editEvent(eventId) {
-        try {
-            console.log('Редактирование мероприятия с ID:', eventId);
-            const response = await fetch(`/api/events/${eventId}`);
-            if (!response.ok) throw new Error('Ошибка загрузки данных мероприятия');
-            const event = await response.json();
+    deleteEventBtn.addEventListener('click', async () => {
+        if (!editingEventId) return;
 
-            document.getElementById('event-name').value = event.name;
-            document.getElementById('event-description').value = event.description || '';
-            document.getElementById('event-weight').value = event.weight;
-            document.getElementById('addEventModalLabel').textContent = 'Редактировать мероприятие';
-            window.editingEventId = eventId;
-
-            const modal = new bootstrap.Modal(document.getElementById('addEventModal'));
-            modal.show();
-        } catch (error) {
-            console.error('Ошибка при редактировании мероприятия:', error);
-            alert(`Ошибка: ${error.message}`);
-        }
-    }
-
-    async function toggleParticipation(eventId, studentId, td) {
-        try {
-            const participationExistsResponse = await fetch(`/api/events/participations?event_id=${eventId}&student_id=${studentId}`);
-            if (!participationExistsResponse.ok) throw new Error('Ошибка проверки участия');
-            const participationData = await participationExistsResponse.json();
-
-            let response;
-            if (participationData.length > 0) {
-                // Удаляем участие
-                response = await fetch(`/api/event_participations/${participationData[0].id}`, {
+        if (confirm('Вы уверены, что хотите удалить это мероприятие?')) {
+            try {
+                const response = await fetch(`/api/events/${editingEventId}`, {
                     method: 'DELETE'
                 });
-                if (!response.ok) throw new Error('Ошибка удаления участия');
-                td.textContent = '';
-                td.style.backgroundColor = ''; // Убираем цвет
-            } else {
-                // Добавляем участие
-                response = await fetch('/api/events/participation', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ event_id: eventId, student_id: studentId })
-                });
-                if (!response.ok) throw new Error('Ошибка добавления участия');
-                const eventResponse = await fetch(`/api/events/${eventId}`);
-                const event = await eventResponse.json();
-                td.textContent = event.weight;
-                td.style.backgroundColor = '#d4edda'; // Светло-зелёный фон
-            }
+                if (!response.ok) throw new Error('Ошибка удаления мероприятия');
+                modal.hide();
+                editingEventId = null;
+                modalTitle.textContent = 'Добавить мероприятие';
+                document.getElementById('event-name').value = '';
+                document.getElementById('event-description').value = '';
+                document.getElementById('event-weight').value = '';
+                deleteEventBtn.style.display = 'none';
 
-            if (!response.ok) throw new Error('Ошибка обновления участия');
-        } catch (error) {
-            console.error('Ошибка при обновлении участия:', error);
-            alert(`Ошибка: ${error.message}`);
+                await loadEvents();
+            } catch (error) {
+                console.error('Ошибка при удалении мероприятия:', error);
+                alert(`Ошибка: ${error.message}`);
+            }
         }
-    }
+    });
+
+    window.editEvent = function(eventId) {
+        fetch(`/api/events/${eventId}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Ошибка загрузки данных мероприятия');
+                return response.json();
+            })
+            .then(event => {
+                document.getElementById('event-name').value = event.name;
+                document.getElementById('event-description').value = event.description || '';
+                document.getElementById('event-weight').value = event.weight;
+                modalTitle.textContent = 'Редактировать мероприятие';
+                editingEventId = eventId;
+                deleteEventBtn.style.display = 'inline-block';
+                modal.show();
+            })
+            .catch(error => {
+                console.error('Ошибка при редактировании мероприятия:', error);
+                alert(`Ошибка: ${error.message}`);
+            });
+    };
 }

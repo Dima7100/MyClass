@@ -7,6 +7,24 @@ router.get('/api/events', async (req, res) => {
         const [rows] = await db.execute('SELECT * FROM events ORDER BY name ASC');
         res.json(rows);
     } catch (error) {
+        console.error('Ошибка в /api/events:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/api/events/participations', async (req, res) => {
+    try {
+        const { event_id, student_id } = req.query;
+        let query = 'SELECT * FROM event_participations';
+        let params = [];
+        if (event_id && student_id) {
+            query += ' WHERE event_id = ? AND student_id = ?';
+            params = [event_id, student_id];
+        }
+        const [rows] = await db.execute(query, params);
+        res.json(rows);
+    } catch (error) {
+        console.error('Ошибка в /api/events/participations:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -33,6 +51,7 @@ router.post('/api/events', async (req, res) => {
         );
         res.json({ id: result.insertId, name, description, weight });
     } catch (error) {
+        console.error('Ошибка в /api/events:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -48,6 +67,7 @@ router.put('/api/events/:id', async (req, res) => {
         );
         res.json({ id, name, description, weight });
     } catch (error) {
+        console.error('Ошибка в /api/events/:id:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -58,23 +78,7 @@ router.delete('/api/events/:id', async (req, res) => {
         await db.execute('DELETE FROM events WHERE id = ?', [id]);
         res.json({ message: 'Мероприятие удалено' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-router.get('/api/events/participations', async (req, res) => {
-    try {
-        const { event_id, student_id } = req.query;
-        let query = 'SELECT * FROM event_participations';
-        let params = [];
-        if (event_id && student_id) {
-            query += ' WHERE event_id = ? AND student_id = ?';
-            params = [event_id, student_id];
-        }
-        const [rows] = await db.execute(query, params);
-        res.json(rows);
-    } catch (error) {
-        console.error('Ошибка в /api/events/participations:', error);
+        console.error('Ошибка в /api/events/:id:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -88,6 +92,7 @@ router.post('/api/events/participation', async (req, res) => {
         );
         res.json({ id: result.insertId, event_id, student_id });
     } catch (error) {
+        console.error('Ошибка в /api/events/participation:', error);
         res.status(500).json({ error: error.message });
     }
 });

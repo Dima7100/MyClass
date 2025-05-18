@@ -1,7 +1,19 @@
 <div id="events-section">
-    <div class="mb-3">
+    <div class="container mt-4">
+        <h2>Мероприятия</h2>
         <link rel="stylesheet" href="css/events.css">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">Добавить мероприятие</button>
+        <div class="mb-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">Добавить мероприятие</button>
+        </div>
+        <table class="table table-bordered event-table" id="events-table">
+            <thead>
+                <tr>
+                    <th>Названия мероприятий</th>
+                    <!-- Динамически добавляем заголовки учеников -->
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
     <!-- Модальное окно для добавления/редактирования мероприятия -->
@@ -14,42 +26,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="event-name" class="form-label">Название мероприятия</label>
-                        <input type="text" class="form-control" id="event-name" required>
+                        <label for="event-name" class="form-label">Название</label>
+                        <input type="text" class="form-control" id="event-name" required placeholder="Название мероприятия">
                     </div>
                     <div class="mb-3">
-                        <label for="event-description" class="form-label">Описание мероприятия</label>
-                        <textarea class="form-control" id="event-description" rows="3"></textarea>
+                        <label for="event-description" class="form-label">Описание</label>
+                        <textarea class="form-control" id="event-description" rows="3" placeholder="Описание мероприятия"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="event-weight" class="form-label">Вес мероприятия</label>
-                        <input type="number" class="form-control" id="event-weight" min="1" required>
+                        <label for="event-weight" class="form-label">Вес (баллы)</label>
+                        <input type="number" class="form-control" id="event-weight" required placeholder="Вес мероприятия">
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="delete-event-btn" style="display: none;">Удалить</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                     <button type="button" class="btn btn-primary" id="save-event-btn">Добавить</button>
-                    <button type="button" class="btn btn-danger" id="delete-event-btn" style="display: none;">Удалить мероприятие</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Таблица мероприятий -->
-    <table id="events-table" class="table table-bordered">
-        <thead>
-            <tr id="events-header">
-                <!-- Заголовки будут заполняться динамически -->
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Данные будут заполняться через JS -->
-        </tbody>
-        <tfoot>
-            <tr id="events-total">
-                <!-- Сумма баллов будет заполняться динамически -->
-            </tr>
-        </tfoot>
-    </table>
-    <div id="status-message" class="alert" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
 </div>
