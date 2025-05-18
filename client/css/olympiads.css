@@ -22,3 +22,11 @@
     color: #6c63ff;
     border-bottom: 2px solid #6c63ff;
 }
+
+.nav-tabs {
+    margin-bottom: 20px; /* Добавляем отступ в 20px снизу вкладок */
+}
+
+.tab-content {
+    padding-top: 10px; /* Добавляем отступ сверху контента */
+}

@@ -58,6 +58,10 @@ router.post('/api/olympiads/participants', async (req, res) => {
 router.put('/api/olympiads/result', async (req, res) => {
     try {
         const { stage, subject_id, student_id, status } = req.body;
+        const validStatuses = ['Участник', 'Призёр', 'Победитель'];
+        if (!validStatuses.includes(status)) {
+            throw new Error('Недопустимый статус. Допустимые значения: Участник, Призёр, Победитель');
+        }
         await db.execute(
             'UPDATE olympiad_participations SET status = ? WHERE stage = ? AND subject_id = ? AND student_id = ?',
             [status, stage, subject_id, student_id]
