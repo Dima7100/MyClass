@@ -39,7 +39,14 @@ function setupEventListeners() {
     // Добавление предмета
     document.querySelectorAll('[data-bs-target="#addSubjectModal"]').forEach(btn => {
         btn.addEventListener('click', () => {
-            currentStage = btn.closest('.tab-pane').id.split('-')[0];
+            const tabPane = btn.closest('.tab-pane');
+            if (!tabPane) {
+                console.error('Не удалось определить текущую вкладку для кнопки добавления предмета');
+                currentStage = 'school'; // Устанавливаем значение по умолчанию
+            } else {
+                currentStage = tabPane.id.split('-')[0];
+            }
+            console.log('Открытие модального окна для добавления предмета, currentStage:', currentStage);
             document.getElementById('subject-name').value = '';
         });
     });
@@ -51,19 +58,25 @@ function setupEventListeners() {
             return;
         }
 
+        console.log('Добавление предмета:', { stage: currentStage, subject_name: subjectName });
+
         try {
             const response = await fetch('/api/olympiads/subject', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ stage: currentStage, subject_name: subjectName })
             });
-            if (!response.ok) throw new Error('Ошибка добавления предмета');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Ошибка добавления предмета: ${errorText}`);
+            }
             const subject = await response.json();
             olympiadData[currentStage].subjects.push(subject);
             addSubjectModal.hide();
             updateButtonsState(currentStage);
             loadOlympiads();
         } catch (error) {
+            console.error('Ошибка при добавлении предмета:', error);
             alert(`Ошибка: ${error.message}`);
         }
     });
