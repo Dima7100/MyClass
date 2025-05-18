@@ -24,45 +24,57 @@
             </li>
         </ul>
 
-        <div class="tab-content" id="olympiadTabContent">
-            <div class="tab-pane fade show active" id="school-tab-pane">
-                <button class="btn btn-primary mb-3" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
-                <button class="btn btn-primary mb-3" id="add-participants-btn-school" data-bs-target="#addParticipantsModal" data-bs-toggle="modal">Добавить участников</button>
-                <button class="btn btn-primary mb-3" id="add-result-btn-school" data-bs-target="#addResultModal" data-bs-toggle="modal">Добавить результат</button>
-                <table class="table table-bordered olympiad-table" data-stage="school">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="school-content" role="tabpanel" aria-labelledby="school-tab">
+                <div class="d-flex mb-3">
+                    <button class="btn btn-primary me-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
+                    <button class="btn btn-primary me-2" id="add-participants-btn-school" data-bs-target="#addParticipantsModal" data-bs-toggle="modal" disabled>Добавить участников</button>
+                    <button class="btn btn-primary me-2" id="add-result-btn-school" data-bs-target="#addResultModal" data-bs-toggle="modal" disabled>Добавить результат</button>
+                    <button class="btn btn-danger" id="delete-subject-btn-school" disabled>Удалить предмет</button>
+                </div>
+                <table class="table olympiad-table" data-stage="school">
                     <thead>
                         <tr class="olympiad-header"></tr>
                     </thead>
                     <tbody class="olympiad-body"></tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="municipal-tab-pane">
-                <button class="btn btn-primary mb-3" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
-                <button class="btn btn-primary mb-3" id="add-participants-btn-municipal" data-bs-target="#addParticipantsModal" data-bs-toggle="Modal">Добавить участников</button>
-                <button class="btn btn-primary mb-3" id="add-result-btn-municipal" data-bs-target="#addResultModal" data-bs-toggle="modal">Добавить результат</button>
-                <table class="table table-bordered olympiad-table" data-stage="municipal">
+            <div class="tab-pane fade" id="municipal-content" role="tabpanel" aria-labelledby="municipal-tab">
+                <div class="d-flex mb-3">
+                    <button class="btn btn-primary me-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
+                    <button class="btn btn-primary me-2" id="add-participants-btn-municipal" data-bs-target="#addParticipantsModal" data-bs-toggle="modal" disabled>Добавить участников</button>
+                    <button class="btn btn-primary me-2" id="add-result-btn-municipal" data-bs-target="#addResultModal" data-bs-toggle="modal" disabled>Добавить результат</button>
+                    <button class="btn btn-danger" id="delete-subject-btn-municipal" disabled>Удалить предмет</button>
+                </div>
+                <table class="table olympiad-table" data-stage="municipal">
                     <thead>
                         <tr class="olympiad-header"></tr>
                     </thead>
                     <tbody class="olympiad-body"></tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="regional-tab-pane">
-                <button class="btn btn-primary mb-3" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
-                <button class="btn btn-primary mb-3" id="add-participants-btn-regional" data-bs-target="#addParticipantsModal" data-bs-toggle="modal">Добавить участников</button>
-                <button class="btn btn-primary mb-3" id="add-result-btn-regional" data-bs-target="#addResultModal" data-bs-toggle="modal">Добавить результат</button>
-                <table class="table table-bordered olympiad-table" data-stage="regional">
+            <div class="tab-pane fade" id="regional-content" role="tabpanel" aria-labelledby="regional-tab">
+                <div class="d-flex mb-3">
+                    <button class="btn btn-primary me-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
+                    <button class="btn btn-primary me-2" id="add-participants-btn-regional" data-bs-target="#addParticipantsModal" data-bs-toggle="modal" disabled>Добавить участников</button>
+                    <button class="btn btn-primary me-2" id="add-result-btn-regional" data-bs-target="#addResultModal" data-bs-toggle="modal" disabled>Добавить результат</button>
+                    <button class="btn btn-danger" id="delete-subject-btn-regional" disabled>Удалить предмет</button>
+                </div>
+                <table class="table olympiad-table" data-stage="regional">
                     <thead>
                         <tr class="olympiad-header"></tr>
                     </thead>
                     <tbody class="olympiad-body"></tbody>
                 </table>
             </div>
-            <div class="tab-pane fade" id="final-tab-pane">
-                <button class="btn btn-primary mb-3" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
-                <button class="btn btn-primary mb-3" id="add-participants-btn-final" data-bs-target="#addParticipantsModal" data-bs-toggle="modal">Добавить участников</button>
-                <button class="btn btn-primary mb-3" id="add-result-btn-final" data-bs-target="#addResultModal" data-bs-toggle="modal">Добавить результат</button>
-                <table class="table table-bordered olympiad-table" data-stage="final">
+            <div class="tab-pane fade" id="final-content" role="tabpanel" aria-labelledby="final-tab">
+                <div class="d-flex mb-3">
+                    <button class="btn btn-primary me-2" data-bs-target="#addSubjectModal" data-bs-toggle="modal">Добавить предмет</button>
+                    <button class="btn btn-primary me-2" id="add-participants-btn-final" data-bs-target="#addParticipantsModal" data-bs-toggle="modal" disabled>Добавить участников</button>
+                    <button class="btn btn-primary me-2" id="add-result-btn-final" data-bs-target="#addResultModal" data-bs-toggle="modal" disabled>Добавить результат</button>
+                    <button class="btn btn-danger" id="delete-subject-btn-final" disabled>Удалить предмет</button>
+                </div>
+                <table class="table olympiad-table" data-stage="final">
                     <thead>
                         <tr class="olympiad-header"></tr>
                     </thead>
@@ -70,7 +82,6 @@
                 </table>
             </div>
         </div>
-
         <!-- Модальное окно для добавления предмета -->
         <div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -153,20 +164,50 @@
             </div>
         </div>
     </div>
+    <!-- Модальное окно для удаления предмета -->
+    <div class="modal fade" id="deleteSubjectModal" tabindex="-1" aria-labelledby="deleteSubjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSubjectModalLabel">Удалить предмет</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="delete-subject-select" class="form-label">Выберите предмет для удаления:</label>
+                        <select class="form-select" id="delete-subject-select">
+                            <option value="">Выберите предмет</option>
+                        </select>
+                    </div>
+                    <p>Вы уверены, что хотите удалить этот предмет? Это действие необратимо.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirm-delete-subject">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script src="/js/olympiads/data.js"></script>
-    <script src="/js/olympiads/ui.js"></script>
-    <script src="/js/olympiads/table.js"></script>
-    <script src="/js/olympiads/utils.js"></script>
-    <script src="/js/olympiads.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof window.init_olympiads === 'function') {
-                window.init_olympiads();
-            } else {
-                console.error('Функция init_olympiads не определена');
-            }
-        });
-    </script>
+
+<!-- Модальное окно для удаления участника -->
+<div class="modal fade" id="deleteParticipantModal" tabindex="-1" aria-labelledby="deleteParticipantModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteParticipantModalLabel">Удалить участника</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить этого участника? Это действие необратимо.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-participant">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>   
+
 </body>
 </html>

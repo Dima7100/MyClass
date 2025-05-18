@@ -49,25 +49,77 @@ document.addEventListener('DOMContentLoaded', () => {
             const content = await response.text();
             sectionContent.innerHTML = content;
 
-            // Загружаем и выполняем JS-файл
-            const script = document.createElement('script');
-            script.src = `js/${section}.js`;
-            script.async = true;
-            script.onload = () => {
-                // Вызываем функцию инициализации, если она определена
-                if (typeof window[`init_${section}`] === 'function') {
-                    window[`init_${section}`]();
+            // Загружаем зависимости для раздела "olympiads"
+            if (section === 'olympiads') {
+                const dependencies = [
+                    'js/olympiads/data.js',
+                    'js/olympiads/ui.js',
+                    'js/olympiads/table.js',
+                    'js/olympiads/utils.js'
+                ];
+
+                for (const src of dependencies) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = src;
+                        script.async = true;
+                        script.onload = resolve;
+                        script.onerror = () => {
+                            console.error(`Ошибка загрузки скрипта ${src}`);
+                            reject(new Error(`Ошибка загрузки ${src}`));
+                        };
+                        document.body.appendChild(script);
+                    });
                 }
-            };
-            script.onerror = () => console.error(`Ошибка загрузки скрипта js/${section}.js`);
-            document.body.appendChild(script);
+            }
+
+            // Загружаем зависимости для раздела "olympiad-summary"
+            if (section === 'olympiad-summary') {
+                const dependencies = [
+                    'js/olympiads/data.js',
+                    'js/olympiads/table.js'
+                ];
+
+                for (const src of dependencies) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = src;
+                        script.async = true;
+                        script.onload = resolve;
+                        script.onerror = () => {
+                            console.error(`Ошибка загрузки скрипта ${src}`);
+                            reject(new Error(`Ошибка загрузки ${src}`));
+                        };
+                        document.body.appendChild(script);
+                    });
+                }
+            }
+
+            // Загружаем и выполняем основной JS-файл
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = `js/${section}.js`;
+                script.async = true;
+                script.onload = () => {
+                    // Вызываем функцию инициализации, если она определена
+                    if (typeof window[`init_${section}`] === 'function') {
+                        window[`init_${section}`]();
+                    }
+                    resolve();
+                };
+                script.onerror = () => {
+                    console.error(`Ошибка загрузки скрипта js/${section}.js`);
+                    reject(new Error(`Ошибка загрузки js/${section}.js`));
+                };
+                document.body.appendChild(script);
+            });
         } catch (error) {
             sectionContent.innerHTML = `<p>Ошибка загрузки раздела: ${error.message}</p>`;
         }
     }
 
-        // Загружаем раздел "Личные данные" по умолчанию
-        loadSection('personal');
-        sectionTitle.textContent = 'Личные данные';
-        breadcrumbSection.textContent = 'Личные данные';
+    // Загружаем раздел "Личные данные" по умолчанию
+    loadSection('personal');
+    sectionTitle.textContent = 'Личные данные';
+    breadcrumbSection.textContent = 'Личные данные';
 });

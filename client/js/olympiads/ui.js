@@ -1,3 +1,4 @@
+console.log('Начало загрузки ui.js');
 function initializeTooltips() {
     console.log('Инициализация тултипов');
     const tooltipTriggerList = document.querySelectorAll('[data-bs-tooltip="tooltip"]');
@@ -69,6 +70,48 @@ function setupEventListeners() {
         }
     });
 
+    // Удаление предмета
+    document.querySelectorAll('[id^="delete-subject-btn-"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const stage = btn.id.split('-')[3]; // Получаем этап из id кнопки (school, municipal, и т.д.)
+            currentStage = stage;
+            const modal = new bootstrap.Modal(document.getElementById('deleteSubjectModal'));
+
+            // Заполняем список предметов
+            const subjectSelect = document.getElementById('delete-subject-select');
+            await loadOlympiads(); // Убедимся, что данные загружены
+            if (!olympiadData[currentStage] || !olympiadData[currentStage].subjects) {
+                console.error('Данные для текущего этапа не загружены:', currentStage);
+                subjectSelect.innerHTML = '<option value="">Данные не загружены</option>';
+            } else {
+                subjectSelect.innerHTML = '<option value="">Выберите предмет</option>' + 
+                    olympiadData[currentStage].subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            }
+
+            document.getElementById('confirm-delete-subject').onclick = async () => {
+                const subjectId = parseInt(subjectSelect.value);
+                if (!subjectId) {
+                    alert('Пожалуйста, выберите предмет для удаления');
+                    return;
+                }
+                try {
+                    const response = await fetch(`/api/olympiads/subject/${subjectId}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    if (!response.ok) throw new Error('Ошибка удаления предмета');
+                    olympiadData[currentStage].subjects = olympiadData[currentStage].subjects.filter(s => s.id !== subjectId);
+                    loadOlympiads();
+                    modal.hide();
+                } catch (error) {
+                    console.error('Ошибка при удалении предмета:', error);
+                    alert(`Ошибка: ${error.message}`);
+                }
+            };
+            modal.show();
+        });
+    });
+
     // Добавление участников
     document.querySelectorAll('[data-bs-target="#addParticipantsModal"]').forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -121,6 +164,33 @@ function setupEventListeners() {
         } catch (error) {
             alert(`Ошибка: ${error.message}`);
         }
+    });
+
+    // Удаление участника
+    document.querySelectorAll('.delete-participant-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const participantIds = btn.getAttribute('data-participant-ids').split(',');
+            const modal = new bootstrap.Modal(document.getElementById('deleteParticipantModal'));
+            document.getElementById('confirm-delete-participant').onclick = async () => {
+                try {
+                    for (const participantId of participantIds) {
+                        const [subjectId, studentId] = participantId.split('-');
+                        const response = await fetch(`/api/olympiads/participant/${subjectId}/${studentId}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        if (!response.ok) throw new Error('Ошибка удаления участника');
+                        delete olympiadData[currentStage].participations[subjectId][studentId];
+                    }
+                    loadOlympiads();
+                    modal.hide();
+                } catch (error) {
+                    console.error('Ошибка при удалении участника:', error);
+                    alert(`Ошибка: ${error.message}`);
+                }
+            };
+            modal.show();
+        });
     });
 
     // Добавление результата
@@ -190,5 +260,4 @@ function setupEventListeners() {
         updateResultStatus(document.getElementById('result-subject-select'), document.getElementById('result-student-select'));
     });
 }
-
-console.log('Файл ui.js загружен');
+console.log('Файл ui.js полностью загружен');

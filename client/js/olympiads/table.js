@@ -1,3 +1,4 @@
+console.log('Начало загрузки table.js');
 async function loadOlympiads() {
     for (const stage of stages) {
         const table = document.querySelector(`.olympiad-table[data-stage="${stage}"]`);
@@ -24,9 +25,21 @@ async function loadOlympiads() {
 
             const tbody = table.querySelector('.olympiad-body');
             tbody.innerHTML = (participatingStudents.map(student => {
+                const participantIds = olympiadData[stage].subjects
+                    .filter(subject => olympiadData[stage].participations[subject.id]?.[student.id])
+                    .map(subject => `${subject.id}-${student.id}`);
                 return `
                     <tr>
-                        <td>${student.full_name}</td>
+                        <td>
+                            ${student.full_name}
+                            ${participantIds.length > 0 ? `
+                                <i class="bi bi-x text-muted delete-participant-btn" 
+                                   data-participant-ids="${participantIds.join(',')}" 
+                                   data-bs-toggle="modal" 
+                                   data-bs-target="#deleteParticipantModal" 
+                                   style="cursor: pointer;"></i>
+                            ` : ''}
+                        </td>
                         ${olympiadData[stage].subjects.map(subject => {
                             const status = olympiadData[stage].participations[subject.id]?.[student.id];
                             return `
@@ -38,6 +51,7 @@ async function loadOlympiads() {
                     </tr>
                 `;
             }).join('') || '');
+
             updateButtonsState(stage);
         } catch (error) {
             console.error('Ошибка в loadOlympiads для этапа', stage, ':', error);
@@ -45,5 +59,4 @@ async function loadOlympiads() {
         }
     }
 }
-
-console.log('Файл table.js загружен');
+console.log('Файл table.js полностью загружен');

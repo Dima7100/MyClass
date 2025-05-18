@@ -1,3 +1,4 @@
+console.log('Начало загрузки data.js');
 const stages = ['school', 'municipal', 'regional', 'final'];
 let olympiadData = {
     school: { subjects: [], participations: {}, students: [] },
@@ -5,5 +6,4 @@ let olympiadData = {
     regional: { subjects: [], participations: {}, students: [] },
     final: { subjects: [], participations: {}, students: [] }
 };
-
-console.log('Файл data.js загружен');
+console.log('Файл data.js полностью загружен');
