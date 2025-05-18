@@ -2,17 +2,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 
-// Получение списка мероприятий и участников
 router.get('/api/events', async (req, res) => {
     try {
-        const [events] = await db.execute('SELECT * FROM events');
-        const [participations] = await db.execute(`
-            SELECT ep.event_id, ep.student_id, s.full_name 
-            FROM event_participations ep 
-            JOIN students s ON ep.student_id = s.id
-        `);
-        const [students] = await db.execute('SELECT id, full_name FROM students');
-        res.json({ events, participations, students });
+        const [rows] = await db.execute('SELECT * FROM events ORDER BY name ASC');
+        res.json(rows);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -30,7 +23,6 @@ router.get('/api/events/:id', async (req, res) => {
     }
 });
 
-// Добавление мероприятия
 router.post('/api/events', async (req, res) => {
     try {
         const { name, description, weight } = req.body;
@@ -39,13 +31,12 @@ router.post('/api/events', async (req, res) => {
             'INSERT INTO events (name, description, weight) VALUES (?, ?, ?)',
             [name, description || null, weight]
         );
-        res.json({ id: result.insertId, name, description, weight, participations: {} });
+        res.json({ id: result.insertId, name, description, weight });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Обновление мероприятия
 router.put('/api/events/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -61,11 +52,9 @@ router.put('/api/events/:id', async (req, res) => {
     }
 });
 
-// Удаление мероприятия
 router.delete('/api/events/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        await db.execute('DELETE FROM event_participations WHERE event_id = ?', [id]);
         await db.execute('DELETE FROM events WHERE id = ?', [id]);
         res.json({ message: 'Мероприятие удалено' });
     } catch (error) {
@@ -73,27 +62,31 @@ router.delete('/api/events/:id', async (req, res) => {
     }
 });
 
-// Переключение участия в мероприятии
+router.get('/api/events/participations', async (req, res) => {
+    try {
+        const { event_id, student_id } = req.query;
+        let query = 'SELECT * FROM event_participations';
+        let params = [];
+        if (event_id && student_id) {
+            query += ' WHERE event_id = ? AND student_id = ?';
+            params = [event_id, student_id];
+        }
+        const [rows] = await db.execute(query, params);
+        res.json(rows);
+    } catch (error) {
+        console.error('Ошибка в /api/events/participations:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 router.post('/api/events/participation', async (req, res) => {
     try {
         const { event_id, student_id } = req.body;
-        const [existing] = await db.execute(
-            'SELECT * FROM event_participations WHERE event_id = ? AND student_id = ?',
+        const [result] = await db.execute(
+            'INSERT INTO event_participations (event_id, student_id) VALUES (?, ?)',
             [event_id, student_id]
         );
-        if (existing.length > 0) {
-            await db.execute(
-                'DELETE FROM event_participations WHERE event_id = ? AND student_id = ?',
-                [event_id, student_id]
-            );
-            res.json({ message: 'Участие удалено' });
-        } else {
-            await db.execute(
-                'INSERT INTO event_participations (event_id, student_id) VALUES (?, ?)',
-                [event_id, student_id]
-            );
-            res.json({ message: 'Участие добавлено' });
-        }
+        res.json({ id: result.insertId, event_id, student_id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

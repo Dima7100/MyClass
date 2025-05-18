@@ -13,12 +13,20 @@ async function loadEvents() {
     }
 
     try {
-        const [events] = await db.execute('SELECT * FROM events ORDER BY name ASC');
-        const [participations] = await db.execute(`
-            SELECT ep.event_id, ep.student_id, s.full_name
-            FROM event_participations ep
-            JOIN students s ON ep.student_id = s.id
-        `);
+        // Получаем мероприятия через API
+        const eventsResponse = await fetch('/api/events');
+        if (!eventsResponse.ok) throw new Error('Ошибка загрузки мероприятий');
+        const events = await eventsResponse.json();
+
+        // Получаем данные об участии через API
+        const participationsResponse = await fetch('/api/events/participations');
+        if (!participationsResponse.ok) throw new Error('Ошибка загрузки данных об участии');
+        const participations = await participationsResponse.json();
+
+        // Получаем список учеников
+        const studentsResponse = await fetch('/api/students');
+        if (!studentsResponse.ok) throw new Error('Ошибка загрузки учеников');
+        const students = await studentsResponse.json();
 
         thead.innerHTML = `
             <tr>
@@ -29,17 +37,20 @@ async function loadEvents() {
             </tr>
         `;
 
-        const students = await (await fetch('/api/students')).json();
         tbody.innerHTML = students.map(student => {
             const studentParticipations = participations.filter(p => p.student_id === student.id);
+            const [lastName, firstName] = student.full_name.split(' ').slice(0, 2); // Берем только Фамилию и Имя
+            const shortName = `${lastName} ${firstName.charAt(0).toUpperCase()}.`;
             return `
                 <tr data-student-id="${student.id}">
-                    <td>${student.full_name}</td>
+                    <td>${shortName}</td>
                     ${events.map(event => {
                         const participation = studentParticipations.find(p => p.event_id === event.id);
-                        return `<td data-event-id="${event.id}" data-student-id="${student.id}">
-                            ${participation ? event.weight : ''}
-                        </td>`;
+                        return `
+                            <td data-event-id="${event.id}" data-student-id="${student.id}"
+                                style="${participation ? 'background-color: #d4edda' : ''}">
+                                ${participation ? event.weight : ''}
+                            </td>`;
                     }).join('')}
                 </tr>
             `;
@@ -51,8 +62,16 @@ async function loadEvents() {
                 const studentId = td.dataset.studentId;
                 if (eventId && studentId) {
                     toggleParticipation(eventId, studentId, td);
-                } else if (eventId) {
-                    editEvent(eventId);
+                }
+            });
+
+            // Добавляем обработчик для редактирования мероприятия при клике на заголовок
+            document.querySelectorAll('.event-table th').forEach((th, index) => {
+                if (index !== 0) { // Пропускаем первый столбец (ФИО)
+                    th.addEventListener('click', () => {
+                        const eventId = events[index - 1].id;
+                        editEvent(eventId);
+                    });
                 }
             });
         });
@@ -120,9 +139,10 @@ function setupEventListeners() {
             document.getElementById('event-name').value = event.name;
             document.getElementById('event-description').value = event.description || '';
             document.getElementById('event-weight').value = event.weight;
-            modalTitle.textContent = 'Редактировать мероприятие';
-            editingEventId = eventId;
+            document.getElementById('addEventModalLabel').textContent = 'Редактировать мероприятие';
+            window.editingEventId = eventId;
 
+            const modal = new bootstrap.Modal(document.getElementById('addEventModal'));
             modal.show();
         } catch (error) {
             console.error('Ошибка при редактировании мероприятия:', error);
@@ -132,24 +152,29 @@ function setupEventListeners() {
 
     async function toggleParticipation(eventId, studentId, td) {
         try {
-            const currentValue = td.textContent.trim() ? parseInt(td.textContent) : 0;
-            const participationExists = await fetch(`/api/event_participations?event_id=${eventId}&student_id=${studentId}`);
-            const participationData = await participationExists.json();
+            const participationExistsResponse = await fetch(`/api/events/participations?event_id=${eventId}&student_id=${studentId}`);
+            if (!participationExistsResponse.ok) throw new Error('Ошибка проверки участия');
+            const participationData = await participationExistsResponse.json();
 
             let response;
             if (participationData.length > 0) {
+                // Удаляем участие
                 response = await fetch(`/api/event_participations/${participationData[0].id}`, {
                     method: 'DELETE'
                 });
+                if (!response.ok) throw new Error('Ошибка удаления участия');
                 td.textContent = '';
-                td.style.backgroundColor = '';
+                td.style.backgroundColor = ''; // Убираем цвет
             } else {
-                response = await fetch('/api/event_participations', {
+                // Добавляем участие
+                response = await fetch('/api/events/participation', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ event_id: eventId, student_id: studentId })
                 });
-                const event = (await fetch(`/api/events/${eventId}`)).json();
+                if (!response.ok) throw new Error('Ошибка добавления участия');
+                const eventResponse = await fetch(`/api/events/${eventId}`);
+                const event = await eventResponse.json();
                 td.textContent = event.weight;
                 td.style.backgroundColor = '#d4edda'; // Светло-зелёный фон
             }
